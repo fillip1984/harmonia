@@ -1,3 +1,56 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  h1 {
+    @apply text-8xl;
+  }
+
+  h2 {
+    @apply text-6xl;
+  }
+
+  h3 {
+    @apply text-4xl;
+  }
+
+  h4 {
+    @apply text-2xl;
+  }
+
+  h5 {
+    @apply text-xl;
+  }
+
+  /* [type="text"],
+  [type="email"],
+  [type="url"],
+  [type="password"],
+  [type="number"],
+  [type="date"],
+  [type="datetime-local"],
+  [type="month"],
+  [type="search"],
+  [type="tel"],
+  [type="time"],
+  [type="week"],
+  [multiple],
+  textarea,
+  select {
+    @apply w-full rounded text-black focus:border-black focus:ring-black;
+  } */
+
+  input:disabled,
+  button:disabled {
+    @apply cursor-not-allowed opacity-50 transition-opacity duration-300 ease-in-out;
+  }
+  /*
+  .main-content-container {
+    @apply flex flex-1 flex-col items-center overflow-y-auto px-4 pb-24 pt-8;
+  }
+
+  .main-content {
+    @apply mx-auto w-full sm:w-4/5 xl:w-1/2;
+  } */
+}

@@ -2,7 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-    provider = "prisma-client-js"
+    provider      = "prisma-client-js"
+    binaryTargets = ["native", "linux-arm64-openssl-1.0.x"]
 }
 
 datasource db {
@@ -10,11 +11,11 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Post {
-    id        Int      @id @default(autoincrement())
-    name      String
+model Task {
+    id          String  @id @default(cuid())
+    name        String
+    description String?
+
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-
-    @@index([name])
 }
