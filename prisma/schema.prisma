@@ -11,6 +11,17 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
+model Project {
+    id          String  @id @default(cuid())
+    name        String
+    description String?
+
+    tasks Task[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
 model Task {
     id          String  @id @default(cuid())
     name        String
@@ -20,6 +31,9 @@ model Task {
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+
+    project   Project? @relation(fields: [projectId], references: [id], onDelete: SetNull)
+    projectId String?
 }
 
 model Comment {
@@ -29,6 +43,6 @@ model Comment {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    task   Task   @relation(fields: [taskId], references: [id])
+    task   Task   @relation(fields: [taskId], references: [id], onDelete: Cascade)
     taskId String
 }
