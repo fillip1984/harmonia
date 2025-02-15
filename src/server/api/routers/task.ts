@@ -15,11 +15,29 @@ export const taskRouter = createTRPCRouter({
     }),
   readAll: publicProcedure.query(async ({ ctx }) => {
     return await ctx.db.task.findMany({
+      include: {
+        comments: true,
+      },
       orderBy: {
         createdAt: "asc",
       },
     });
   }),
+  read: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      return await ctx.db.task.findFirst({
+        where: {
+          id: input.id,
+        },
+        include: {
+          comments: true,
+        },
+        orderBy: {
+          createdAt: "asc",
+        },
+      });
+    }),
   update: publicProcedure
     .input(
       z.object({
@@ -46,6 +64,13 @@ export const taskRouter = createTRPCRouter({
         where: {
           id: input.id,
         },
+      });
+    }),
+  addComment: publicProcedure
+    .input(z.object({ text: z.string(), taskId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.db.comment.create({
+        data: { text: input.text, taskId: input.taskId },
       });
     }),
 });

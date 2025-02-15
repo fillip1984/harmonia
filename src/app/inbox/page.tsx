@@ -1,13 +1,13 @@
 "use client";
 
-import React, { type FormEvent, useEffect, useRef, useState } from "react";
-import { FaHandDots, FaPlus, FaTrash } from "react-icons/fa6";
-import TextareaAutosize from "react-textarea-autosize";
-import { api, RouterOutputs } from "~/trpc/react";
 import { useDragAndDrop } from "@formkit/drag-and-drop/react";
-import { number } from "zod";
+import { type FormEvent, useEffect, useRef, useState } from "react";
+import { FaPlus, FaTrash } from "react-icons/fa6";
 import { PiDotsSixVerticalLight } from "react-icons/pi";
-type TaskSummaryType = RouterOutputs["task"]["readAll"][number];
+import TextareaAutosize from "react-textarea-autosize";
+import { api } from "~/trpc/react";
+import { TaskSummaryType } from "~/trpc/types";
+import TaskModal from "../_components/TaskModal";
 
 export default function Inbox() {
   const [isAddTaskVisible, setIsAddTaskVisible] = useState(false);
@@ -25,6 +25,10 @@ export default function Inbox() {
   const handleRemoveTask = (id: string) => {
     removeTask({ id });
   };
+
+  // modal
+  const [taskForEditInModal, setTaskForEditInModal] =
+    useState<TaskSummaryType>();
 
   // DND
   const [parentRef, draggableTasks, setValues] = useDragAndDrop<
@@ -50,7 +54,8 @@ export default function Inbox() {
         {draggableTasks?.map((task) => (
           <div
             key={task.id}
-            className="group mt-2 flex gap-2 border-b border-gray p-2">
+            onClick={() => setTaskForEditInModal(task)}
+            className="group mt-2 flex cursor-pointer gap-2 border-b border-gray p-2">
             <PiDotsSixVerticalLight className="dragHandle cursor-grab" />
             <input
               type="checkbox"
@@ -81,6 +86,13 @@ export default function Inbox() {
 
         {isAddTaskVisible && (
           <AddTask dismiss={() => setIsAddTaskVisible(false)} />
+        )}
+
+        {taskForEditInModal && (
+          <TaskModal
+            taskId={taskForEditInModal.id}
+            dismiss={() => setTaskForEditInModal(undefined)}
+          />
         )}
       </div>
     </div>

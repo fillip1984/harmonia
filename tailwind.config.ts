@@ -14,7 +14,7 @@ export default {
       danger: "#f64740",
       warning: "#f4e04d",
       background: "#2e3d4a",
-      foreground: "#6a8eae",
+      foreground: "#16293a",
       transparent: "inherit",
     },
     extend: {
