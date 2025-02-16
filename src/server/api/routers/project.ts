@@ -15,6 +15,11 @@ export const projectRouter = createTRPCRouter({
     }),
   readAll: publicProcedure.query(async ({ ctx }) => {
     return await ctx.db.project.findMany({
+      include: {
+        _count: {
+          select: { tasks: true },
+        },
+      },
       orderBy: {
         createdAt: "asc",
       },

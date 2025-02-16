@@ -13,16 +13,6 @@ export default function TaskList({ project }: { project: ProjectDetailType }) {
     setIsAddTaskVisible(true);
   };
 
-  const utils = api.useUtils();
-  const { mutate: removeTask } = api.task.delete.useMutation({
-    onSuccess: async () => {
-      await utils.task.invalidate();
-    },
-  });
-  const handleRemoveTask = (id: string) => {
-    removeTask({ id });
-  };
-
   // modal
   const [taskForEditInModal, setTaskForEditInModal] =
     useState<TaskSummaryType>();
@@ -50,7 +40,6 @@ export default function TaskList({ project }: { project: ProjectDetailType }) {
             key={task.id}
             task={task}
             setTaskForEditInModal={setTaskForEditInModal}
-            handleRemoveTask={handleRemoveTask}
           />
         ))}
       </div>
@@ -86,12 +75,25 @@ export default function TaskList({ project }: { project: ProjectDetailType }) {
 const TaskRow = ({
   task,
   setTaskForEditInModal,
-  handleRemoveTask,
 }: {
   task: TaskSummaryType;
   setTaskForEditInModal: (task: TaskSummaryType) => void;
-  handleRemoveTask: (id: string) => void;
 }) => {
+  const utils = api.useUtils();
+  const { mutate: removeTask } = api.task.delete.useMutation({
+    onSuccess: async () => {
+      await utils.project.readAll.invalidate();
+      if (task.projectId) {
+        await utils.project.read.invalidate({ id: task.projectId });
+      } else {
+        await utils.task.readInbox.invalidate();
+      }
+    },
+  });
+  const handleRemoveTask = (id: string) => {
+    removeTask({ id });
+  };
+
   return (
     <div
       onClick={() => setTaskForEditInModal(task)}

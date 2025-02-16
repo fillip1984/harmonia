@@ -69,7 +69,7 @@ export default function TaskModal({
         </div>
 
         {/* main content */}
-        <div className="flex">
+        <div className="flex flex-1">
           {/* leading */}
           <div className="flex flex-1 flex-col px-4 pt-2">
             <div className="flex gap-2">
